@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Twilight Dashboard</title>
+    <!-- Use direct CDN links -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <style>
+      .dark-mode {
+        --tw-bg-opacity: 1;
+        background-color: rgba(17, 24, 39, var(--tw-bg-opacity));
+        --tw-text-opacity: 1;
+        color: rgba(229, 231, 235, var(--tw-text-opacity));
+      }
+
+      .light-mode {
+        --tw-bg-opacity: 1;
+        background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
+        --tw-text-opacity: 1;
+        color: rgba(17, 24, 39, var(--tw-text-opacity));
+      }
+
+      .dark-mode .card {
+        --tw-bg-opacity: 1;
+        background-color: rgba(31, 41, 55, var(--tw-bg-opacity));
+        --tw-border-opacity: 1;
+        border-color: rgba(55, 65, 81, var(--tw-border-opacity));
+      }
+
+      .light-mode .card {
+        --tw-bg-opacity: 1;
+        background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
+        --tw-border-opacity: 1;
+        border-color: rgba(209, 213, 219, var(--tw-border-opacity));
+      }
+
+      .dark-mode .header {
+        --tw-bg-opacity: 1;
+        background-color: rgba(31, 41, 55, var(--tw-bg-opacity));
+        --tw-border-opacity: 1;
+        border-color: rgba(55, 65, 81, var(--tw-border-opacity));
+      }
+
+      .light-mode .header {
+        --tw-bg-opacity: 1;
+        background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
+        --tw-border-opacity: 1;
+        border-color: rgba(209, 213, 219, var(--tw-border-opacity));
+      }
+
+      .dark-mode .tab-active {
+        --tw-bg-opacity: 1;
+        background-color: rgba(55, 65, 81, var(--tw-bg-opacity));
+        --tw-text-opacity: 1;
+        color: rgba(255, 255, 255, var(--tw-text-opacity));
+      }
+
+      .light-mode .tab-active {
+        --tw-bg-opacity: 1;
+        background-color: rgba(219, 234, 254, var(--tw-bg-opacity));
+        --tw-text-opacity: 1;
+        color: rgba(37, 99, 235, var(--tw-text-opacity));
+      }
+
+      .card {
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        cursor: grab;
+        height: fit-content; /* Important for dynamic height */
+      }
+
+      .card:active {
+        cursor: grabbing;
+      }
+
+      .card.dragging {
+        transform: scale(1.02);
+        box-shadow:
+          0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        z-index: 10;
+      }
+
+      /* Grid to support automatic placement with dynamic heights */
+      .masonry-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-auto-rows: 1px; /* This small value helps with placement algorithm */
+        grid-gap: 1.5rem;
+      }
+    </style>
+  </head>
+  <body class="light-mode min-h-screen transition-colors duration-200">
+    <!-- Header -->
+    <header
+      class="header border-b shadow-sm sticky top-0 z-50 transition-colors duration-200"
+    >
+      <div class="container mx-auto px-5 py-3">
+        <div class="flex flex-wrap items-center justify-between">
+          <!-- Logo -->
+          <div class="flex items-center">
+            <svg
+              class="h-8 w-8 mr-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 2L2 7V17L12 22L22 17V7L12 2Z"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <path
+                d="M12 22V12"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <path
+                d="M22 7L12 12L2 7"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+            <span class="font-bold text-lg">Twilight Dashboard</span>
+          </div>
+
+          <!-- Tabs - Now in the same row as logo -->
+          <div
+            class="order-3 md:order-2 w-full md:w-auto mt-2 md:mt-0 overflow-x-auto"
+          >
+            <div class="flex space-x-1">
+              <button
+                class="tab-button tab-active px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+              >
+                Dashboard
+              </button>
+              <button
+                class="tab-button px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+              >
+                Projects
+              </button>
+              <button
+                class="tab-button px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+              >
+                Resources
+              </button>
+              <button
+                class="tab-button px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+              >
+                Settings
+              </button>
+            </div>
+          </div>
+
+          <!-- Search and Theme toggle -->
+          <div class="flex order-2 md:order-3 items-center space-x-2">
+            <!-- Search Bar -->
+            <div class="relative hidden md:block">
+              <input
+                type="text"
+                placeholder="Search..."
+                class="w-40 lg:w-64 px-3 py-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-300 light:bg-white-700 light:border-white-600 light:focus:ring-blue-500 transition-colors duration-200"
+              />
+              <button class="absolute right-2 top-1.5">
+                <i class="fas fa-search text-sm"></i>
+              </button>
+            </div>
+
+            <!-- Theme Toggle -->
+            <button
+              id="theme-toggle"
+              class="rounded-full p-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+            >
+              <i class="fas fa-moon dark:hidden"></i>
+              <i class="fas fa-sun hidden dark:block"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Search (Full Width) -->
+        <div class="md:hidden mt-2">
+          <div class="relative">
+            <input
+              type="text"
+              placeholder="Search..."
+              class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-500 transition-colors duration-200"
+            />
+            <button class="absolute right-3 top-2">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+      <div id="card-container" class="masonry-grid">
+        <!-- Cards will be dynamically created here -->
+      </div>
+    </main>
+
+    <script>
+      // Sample data for cards with varying content lengths
+      const cardsData = [
+        {
+          title: "Development Resources",
+          links: [
+            { name: "GitHub Repository", url: "#" },
+            { name: "Documentation", url: "#" },
+            { name: "API References", url: "#" },
+            { name: "Coding Standards", url: "#" },
+            { name: "Best Practices", url: "#" },
+            { name: "Developer Forums", url: "#" },
+            { name: "IDE Setup Guide", url: "#" },
+          ],
+        },
+        {
+          title: "Design Assets",
+          links: [
+            { name: "UI Components", url: "#" },
+            { name: "Icon Library", url: "#" },
+            { name: "Color Palette", url: "#" },
+          ],
+        },
+        {
+          title: "Marketing Materials",
+          links: [
+            { name: "Brand Guidelines", url: "#" },
+            { name: "Social Media Assets", url: "#" },
+            { name: "Campaign Templates", url: "#" },
+            { name: "Analytics Dashboard", url: "#" },
+          ],
+        },
+        {
+          title: "Project Management",
+          links: [
+            { name: "Roadmap", url: "#" },
+            { name: "Sprint Planning", url: "#" },
+            { name: "Task Board", url: "#" },
+            { name: "Team Calendar", url: "#" },
+            { name: "Meeting Notes", url: "#" },
+            { name: "Resource Allocation", url: "#" },
+            { name: "Risk Management", url: "#" },
+            { name: "Stakeholder Reports", url: "#" },
+            { name: "Budget Tracking", url: "#" },
+          ],
+        },
+        {
+          title: "Learning Resources",
+          links: [
+            { name: "Tutorials", url: "#" },
+            { name: "Webinars", url: "#" },
+          ],
+        },
+        {
+          title: "Infrastructure",
+          links: [
+            { name: "Servers", url: "#" },
+            { name: "Cloud Resources", url: "#" },
+            { name: "Databases", url: "#" },
+            { name: "Networks", url: "#" },
+            { name: "Security", url: "#" },
+          ],
+        },
+        {
+          title: "Customer Support",
+          links: [
+            { name: "Ticket System", url: "#" },
+            { name: "Chat Support", url: "#" },
+            { name: "Knowledge Base", url: "#" },
+            { name: "Feedback Forms", url: "#" },
+          ],
+        },
+      ];
+
+      // Function to create cards
+      function createCards() {
+        const cardContainer = document.getElementById("card-container");
+        cardContainer.innerHTML = "";
+
+        cardsData.forEach((cardData, index) => {
+          const card = document.createElement("div");
+          card.className =
+            "card border rounded-lg shadow-sm transition-colors duration-200";
+          card.setAttribute("data-id", index);
+
+          // Card header
+          const header = document.createElement("div");
+          header.className =
+            "p-4 border-b font-bold flex justify-between items-center";
+          header.innerHTML = `
+          <h3>${cardData.title}</h3>
+          <div class="flex space-x-2">
+            <button class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+              <i class="fas fa-ellipsis-v"></i>
+            </button>
+            <div class="card-drag-handle cursor-grab">
+              <i class="fas fa-grip-lines"></i>
+            </div>
+          </div>
+        `;
+
+          // Card content
+          const content = document.createElement("div");
+          content.className = "p-4";
+
+          // Links list
+          const linksList = document.createElement("ul");
+          linksList.className = "space-y-2";
+
+          cardData.links.forEach((link, linkIndex) => {
+            const linkItem = document.createElement("li");
+            linkItem.className = "flex items-center justify-between group";
+            linkItem.innerHTML = `
+            <a href="${link.url}" class="hover:underline transition-colors duration-200">
+              <i class="fas fa-link mr-2 text-blue-500 dark:text-blue-400"></i>
+              ${link.name}
+            </a>
+            <button class="edit-link-btn opacity-0 group-hover:opacity-100 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-opacity duration-200" data-card="${index}" data-link="${linkIndex}">
+              <i class="fas fa-edit"></i>
+            </button>
+          `;
+            linksList.appendChild(linkItem);
+          });
+
+          content.appendChild(linksList);
+          card.appendChild(header);
+          card.appendChild(content);
+          cardContainer.appendChild(card);
+        });
+
+        // Initialize drag and drop for cards
+        initDragAndDrop();
+
+        // Apply masonry layout by setting grid row spans based on content height
+        resizeAllGridItems();
+
+        // Add event listeners for edit buttons
+        document.querySelectorAll(".edit-link-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const cardIndex = this.getAttribute("data-card");
+            const linkIndex = this.getAttribute("data-link");
+            editLink(cardIndex, linkIndex);
+          });
+        });
+      }
+
+      // Function to resize grid items for masonry layout
+      function resizeGridItem(item) {
+        const grid = document.getElementById("card-container");
+        const rowHeight = parseInt(
+          window.getComputedStyle(grid).getPropertyValue("grid-auto-rows"),
+        );
+        const rowGap = parseInt(
+          window.getComputedStyle(grid).getPropertyValue("grid-row-gap"),
+        );
+
+        const contentHeight = item.getBoundingClientRect().height;
+        const rowSpan = Math.ceil(
+          (contentHeight + rowGap) / (rowHeight + rowGap),
+        );
+
+        item.style.gridRowEnd = "span " + rowSpan;
+      }
+
+      function resizeAllGridItems() {
+        const allItems = document.querySelectorAll(".card");
+        allItems.forEach((item) => {
+          resizeGridItem(item);
+        });
+      }
+
+      // Add event listener for window resize
+      window.addEventListener("resize", resizeAllGridItems);
+
+      // Initialize drag and drop functionality
+      function initDragAndDrop() {
+        const cardContainer = document.getElementById("card-container");
+
+        new Sortable(cardContainer, {
+          animation: 150,
+          handle: ".card-drag-handle",
+          ghostClass: "opacity-60",
+          chosenClass: "dragging",
+          onEnd: function (evt) {
+            // Update the order of cards in the data
+            const cardId = evt.item.getAttribute("data-id");
+            const oldIndex = evt.oldIndex;
+            const newIndex = evt.newIndex;
+
+            if (oldIndex !== newIndex) {
+              const movedItem = cardsData.splice(oldIndex, 1)[0];
+              cardsData.splice(newIndex, 0, movedItem);
+
+              // Recreate cards to update their data-id attributes
+              createCards();
+            }
+          },
+        });
+      }
+
+      // Edit link function
+      function editLink(cardIndex, linkIndex) {
+        const link = cardsData[cardIndex].links[linkIndex];
+        const newName = prompt("Edit link name:", link.name);
+
+        if (newName !== null && newName.trim() !== "") {
+          cardsData[cardIndex].links[linkIndex].name = newName.trim();
+          createCards(); // Refresh the cards
+        }
+      }
+
+      // Toggle between light and dark mode
+      function toggleTheme() {
+        document.body.classList.toggle("light-mode");
+        document.body.classList.toggle("dark-mode");
+
+        // Save preference to localStorage
+        const isDarkMode = document.body.classList.contains("dark-mode");
+        localStorage.setItem("darkMode", isDarkMode);
+      }
+
+      // Initialize theme based on saved preference
+      function initTheme() {
+        const savedDarkMode = localStorage.getItem("darkMode") === "true";
+
+        if (savedDarkMode) {
+          document.body.classList.remove("light-mode");
+          document.body.classList.add("dark-mode");
+        } else {
+          document.body.classList.add("light-mode");
+          document.body.classList.remove("dark-mode");
+        }
+      }
+
+      // Tab functionality
+      function initTabs() {
+        const tabButtons = document.querySelectorAll(".tab-button");
+
+        tabButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            // Remove active class from all tabs
+            tabButtons.forEach((tab) => tab.classList.remove("tab-active"));
+
+            // Add active class to clicked tab
+            this.classList.add("tab-active");
+          });
+        });
+      }
+
+      // Initialize the page
+      document.addEventListener("DOMContentLoaded", function () {
+        initTheme();
+        createCards();
+        initTabs();
+
+        // Add event listener for theme toggle button
+        document
+          .getElementById("theme-toggle")
+          .addEventListener("click", toggleTheme);
+
+        // Initial masonry layout
+        setTimeout(resizeAllGridItems, 100); // Small delay to ensure layout is complete
+      });
+    </script>
+  </body>
+</html>
