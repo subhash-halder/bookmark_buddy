@@ -1,7 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { Bookmark, IState } from './interfaces';
+import type { Bookmark, IState, MessageType } from '../interfaces';
 
 let bookmarkSelectedTabIdLocal: string | undefined;
+
+
 async function getBookmarkSelectedTabId(): Promise<string | undefined> {
   if (bookmarkSelectedTabIdLocal === undefined) {
     const selectedTab = (await chrome.storage.local.get(
@@ -11,10 +13,15 @@ async function getBookmarkSelectedTabId(): Promise<string | undefined> {
   }
   return bookmarkSelectedTabIdLocal;
 }
+
+
+
 async function setBookmarkSelectedTabId(tabId: string): Promise<void> {
   bookmarkSelectedTabIdLocal = tabId;
   await chrome.storage.local.set({ bookmarkSelectedTabId: tabId });
 }
+
+
 async function getState(): Promise<IState> {
   const bookmarks = await getBookmarks();
   const selectedBookmarkTabId = await getBookmarkSelectedTabId();
@@ -25,6 +32,30 @@ async function getState(): Promise<IState> {
 }
 
 async function getBookmarks(): Promise<Bookmark[]> {
+  /**
+   * This function transforms the Chrome bookmark tree into a custom Bookmark structure.
+   *
+   * Example of the resulting bookmark structure:
+   * [
+   *   {
+   *     index: 0,
+   *     url: "https://example.com",
+   *     title: "Example",
+   *     id: "unique-id-1",
+   *     parentId: "parent-id",
+   *     children: [
+   *       {
+   *         index: 0,
+   *         url: "https://child-example.com",
+   *         title: "Child Example",
+   *         id: "unique-id-2",
+   *         parentId: "unique-id-1",
+   *         children: undefined
+   *       }
+   *     ]
+   *   }
+   * ]
+   */
   function createBookmarkFromBookmarkTree(
     tree: chrome.bookmarks.BookmarkTreeNode[]
   ): Bookmark[] {
@@ -50,12 +81,10 @@ async function getBookmarks(): Promise<Bookmark[]> {
 
 async function sendState(): Promise<void> {
   const state = await getState();
-  const bookmarkSelectedTabId = await getBookmarkSelectedTabId();
   await chrome.runtime.sendMessage({
-    type: 'newState',
-    state,
-    bookmarkSelectedTabId,
-  });
+    type: 'fullState',
+    state
+  } as MessageType);
 }
 
 chrome.runtime.onMessage.addListener((message) => {
@@ -68,9 +97,9 @@ chrome.runtime.onMessage.addListener((message) => {
         await setBookmarkSelectedTabId(message.tabId);
         const tabId = await getBookmarkSelectedTabId();
         await chrome.runtime.sendMessage({
-          type: 'newBookmarkTabSelectionId',
+          type: 'setBookmarkTabSelectionId',
           tabId,
-        });
+        } as MessageType);
       }
     }
   })(message);

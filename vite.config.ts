@@ -15,13 +15,14 @@ export default defineConfig({
   build: {
     outDir: resolve(__dirname, 'dist'),
     emptyOutDir: true,
-    // watch: process.env.WATCH && watcherOptions,
+    sourcemap: process.env.NODE_ENV === 'development', // Enable sourcemaps for development
     rollupOptions: {
       output: {
         entryFileNames: '[name].js',
+        sourcemapExcludeSources: process.env.NODE_ENV !== 'development', // Strip TypeScript signatures in production
       },
       input: {
-        background: resolve(__dirname, 'src/background.ts'),
+        background: resolve(__dirname, 'src/background/index.ts'),
         // content: resolve(__dirname, 'src/content.ts'),
         main: resolve(__dirname, 'src/index.html'),
       },
