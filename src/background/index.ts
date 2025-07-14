@@ -2,8 +2,9 @@ import { v4 as uuidv4 } from "uuid";
 import type { Bookmark, IState, MessageType } from "../interfaces";
 
 let bookmarkSelectedTabIdLocal: string | undefined;
+let darkModeLocal: boolean | undefined;
 
-async function getBookmarkSelectedTabId(): Promise<string | undefined> {
+async function getBookmarkSelectedTabId(): Promise<string> {
   if (bookmarkSelectedTabIdLocal === undefined) {
     const selectedTab = (await chrome.storage.local.get(
       "bookmarkSelectedTabId",
@@ -18,12 +19,31 @@ async function setBookmarkSelectedTabId(tabId: string): Promise<void> {
   await chrome.storage.local.set({ bookmarkSelectedTabId: tabId });
 }
 
+async function getDarkMode(): Promise<boolean> {
+  if (darkModeLocal === undefined) {
+    const darkModeSetting = (await chrome.storage.local.get(
+      "darkMode",
+    )) as unknown as Record<string, boolean>;
+    darkModeLocal = darkModeSetting.darkMode ?? true;
+  }
+  return darkModeLocal;
+}
+
+async function setDarkMode(darkMode: boolean): Promise<void> {
+  darkModeLocal = darkMode;
+  await chrome.storage.local.set({ darkMode });
+}
+
 async function getState(): Promise<IState> {
-  const bookmarks = await getBookmarks();
-  const selectedBookmarkTabId = await getBookmarkSelectedTabId();
+  const [bookmarks, selectedBookmarkTabId, darkMode] = await Promise.all([
+    getBookmarks(),
+    getBookmarkSelectedTabId(),
+    getDarkMode(),
+  ]);
   return {
     bookmarks,
     selectedBookmarkTabId,
+    darkMode,
   };
 }
 
@@ -99,6 +119,15 @@ chrome.runtime.onMessage.addListener((message) => {
           type: "setBookmarkTabSelectionId",
           tabId,
         } as MessageType);
+        break;
+      }
+      case "setDarkMode": {
+        await setDarkMode(message.darkMode);
+        await chrome.runtime.sendMessage({
+          type: "setDarkMode",
+          darkMode: message.darkMode,
+        } as MessageType);
+        break;
       }
     }
   })(message);

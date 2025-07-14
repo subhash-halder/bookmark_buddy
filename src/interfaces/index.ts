@@ -9,7 +9,8 @@ export interface Bookmark {
 
 export interface IState {
   bookmarks: Bookmark[];
-  selectedBookmarkTabId?: string;
+  selectedBookmarkTabId: string;
+  darkMode: boolean;
 }
 
 export type FullStateMessage = {
@@ -22,4 +23,9 @@ export type SetBookmarkSelectedTabIdMessage = {
   tabId: string;
 };
 
-export type MessageType = FullStateMessage | SetBookmarkSelectedTabIdMessage;
+export type SetDarkModeMessage = {
+  type: 'setDarkMode';
+  darkMode: boolean;
+};
+
+export type MessageType = FullStateMessage | SetBookmarkSelectedTabIdMessage | SetDarkModeMessage;
