@@ -80,7 +80,7 @@ const NewTab = () => {
         <div className="container mx-auto px-5 py-3">
           <div className="flex flex-wrap items-center justify-between">
             <div className="flex items-center flex-grow">
-              <img className="h-8 w-8 mr-2" src="/icons/icon48.png"></img>
+              <img className="h-8 w-8 mr-2" src="/icons/icon48.png" alt="Bookmark Buddy" />
               <span className="font-bold text-lg">Bookmark Buddy</span>
             </div>
 
