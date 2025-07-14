@@ -1,12 +1,9 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Bookmark, MessageType } from "./interfaces";
 import Bookmarks from "./components/bookmark";
 
-function resizeGridItem(item: HTMLElement) {
-  const grid = document.getElementById("card-container");
-  if (!grid) return;
-
+function resizeGridItem(item: HTMLElement, grid: HTMLElement) {
   const rowHeight = parseInt(
     window.getComputedStyle(grid).getPropertyValue("grid-auto-rows"),
   );
@@ -20,13 +17,10 @@ function resizeGridItem(item: HTMLElement) {
   item.style.gridRowEnd = "span " + rowSpan;
 }
 
-function resizeAllGridItems() {
-  const grid = document.getElementById("card-container");
-  if (!grid) return;
-
+function resizeAllGridItems(grid: HTMLElement) {
   const items = grid.children;
   for (const item of items) {
-    resizeGridItem(item as HTMLElement);
+    resizeGridItem(item as HTMLElement, grid);
   }
 }
 
@@ -71,8 +65,13 @@ const NewTab = () => {
     };
   }, []);
 
+  const gridRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    resizeAllGridItems();
+    if (gridRef.current) {
+      console.log("Resizing grid items");
+      resizeAllGridItems(gridRef.current);
+    }
   }, [bookmarks, selectedTabId]);
 
   return (
@@ -107,7 +106,7 @@ const NewTab = () => {
       </header>
 
       <main className="container mx-auto px-4 py-6">
-        <div id="card-container" className="masonry-grid">
+        <div ref={gridRef} id="card-container" className="masonry-grid">
           {bookmarks
             .find((b) => b.id === selectedTabId)
             ?.children?.map((cardData) => (
