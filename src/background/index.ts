@@ -1,26 +1,22 @@
-import { v4 as uuidv4 } from 'uuid';
-import type { Bookmark, IState, MessageType } from '../interfaces';
+import { v4 as uuidv4 } from "uuid";
+import type { Bookmark, IState, MessageType } from "../interfaces";
 
 let bookmarkSelectedTabIdLocal: string | undefined;
-
 
 async function getBookmarkSelectedTabId(): Promise<string | undefined> {
   if (bookmarkSelectedTabIdLocal === undefined) {
     const selectedTab = (await chrome.storage.local.get(
-      'bookmarkSelectedTabId'
+      "bookmarkSelectedTabId",
     )) as unknown as Record<string, string>;
-    bookmarkSelectedTabIdLocal = selectedTab.bookmarkSelectedTabId ?? '0';
+    bookmarkSelectedTabIdLocal = selectedTab.bookmarkSelectedTabId ?? "1";
   }
   return bookmarkSelectedTabIdLocal;
 }
-
-
 
 async function setBookmarkSelectedTabId(tabId: string): Promise<void> {
   bookmarkSelectedTabIdLocal = tabId;
   await chrome.storage.local.set({ bookmarkSelectedTabId: tabId });
 }
-
 
 async function getState(): Promise<IState> {
   const bookmarks = await getBookmarks();
@@ -55,9 +51,12 @@ async function getBookmarks(): Promise<Bookmark[]> {
    *     ]
    *   }
    * ]
+   *
+   * The parents bookmarks will represent the tab and the children will represent
+   * respective bookmarks in that tab.
    */
   function createBookmarkFromBookmarkTree(
-    tree: chrome.bookmarks.BookmarkTreeNode[]
+    tree: chrome.bookmarks.BookmarkTreeNode[],
   ): Bookmark[] {
     const bookmark: Bookmark[] = [...tree]
       .sort((n1, n2) => (n1.index ?? 0) - (n2.index ?? 0))
@@ -82,22 +81,22 @@ async function getBookmarks(): Promise<Bookmark[]> {
 async function sendState(): Promise<void> {
   const state = await getState();
   await chrome.runtime.sendMessage({
-    type: 'fullState',
-    state
+    type: "fullState",
+    state,
   } as MessageType);
 }
 
 chrome.runtime.onMessage.addListener((message) => {
   void (async (message) => {
     switch (message.type) {
-      case 'getState':
+      case "getState":
         await sendState();
         break;
-      case 'setBookmarkTabSelectionId': {
+      case "setBookmarkTabSelectionId": {
         await setBookmarkSelectedTabId(message.tabId);
         const tabId = await getBookmarkSelectedTabId();
         await chrome.runtime.sendMessage({
-          type: 'setBookmarkTabSelectionId',
+          type: "setBookmarkTabSelectionId",
           tabId,
         } as MessageType);
       }
