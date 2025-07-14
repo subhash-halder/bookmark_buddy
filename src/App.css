@@ -2,113 +2,127 @@
 
 .dark-mode {
   --tw-bg-opacity: 1;
-  background-color: rgba(17, 24, 39, var(--tw-bg-opacity));
+  background-color: rgba(17, 24, 39, var(--tw-bg-opacity)); /* gray-900 */
   --tw-text-opacity: 1;
-  color: rgba(229, 231, 235, var(--tw-text-opacity));
+  color: rgba(229, 231, 235, var(--tw-text-opacity)); /* gray-200 */
 }
 
 .light-mode {
   --tw-bg-opacity: 1;
-  background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
+  background-color: rgba(249, 250, 251, var(--tw-bg-opacity)); /* gray-50 */
   --tw-text-opacity: 1;
-  color: rgba(17, 24, 39, var(--tw-text-opacity));
+  color: rgba(17, 24, 39, var(--tw-text-opacity)); /* gray-900 */
 }
 
 .dark-mode .card {
   --tw-bg-opacity: 1;
-  background-color: rgba(31, 41, 55, var(--tw-bg-opacity));
+  background-color: rgba(31, 41, 55, var(--tw-bg-opacity)); /* gray-800 */
   --tw-border-opacity: 1;
-  border-color: rgba(55, 65, 81, var(--tw-border-opacity));
+  border-color: rgba(55, 65, 81, var(--tw-border-opacity)); /* gray-700 */
 }
 
 .light-mode .card {
   --tw-bg-opacity: 1;
-  background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
+  background-color: rgba(255, 255, 255, var(--tw-bg-opacity)); /* white */
   --tw-border-opacity: 1;
-  border-color: rgba(209, 213, 219, var(--tw-border-opacity));
+  border-color: rgba(229, 231, 235, var(--tw-border-opacity)); /* gray-200 */
 }
 
 
 
 .dark-mode .header {
   --tw-bg-opacity: 1;
-  background-color: rgba(31, 41, 55, var(--tw-bg-opacity));
+  background-color: rgba(31, 41, 55, 1); /* gray-800 with full opacity */
   --tw-border-opacity: 1;
-  border-color: rgba(55, 65, 81, var(--tw-border-opacity));
+  border-color: rgba(55, 65, 81, 1); /* gray-700 with full opacity */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
 }
 
 .light-mode .header {
   --tw-bg-opacity: 1;
-  background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
+  background-color: rgba(255, 255, 255, 1); /* white with full opacity */
   --tw-border-opacity: 1;
-  border-color: rgba(209, 213, 219, var(--tw-border-opacity));
+  border-color: rgba(209, 213, 219, 1); /* gray-300 with full opacity */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .dark-mode .tab-active {
   --tw-bg-opacity: 1;
-  background-color: rgba(55, 65, 81, var(--tw-bg-opacity));
+  background-color: rgba(55, 65, 81, var(--tw-bg-opacity)); /* gray-700 */
   --tw-text-opacity: 1;
-  color: rgba(255, 255, 255, var(--tw-text-opacity));
+  color: rgba(255, 255, 255, var(--tw-text-opacity)); /* white */
 }
 
 
 
 .header button,
+.header .tab-button,
 .header .tab-active {
-  border: none;
   border-radius: 0.375rem;
   padding: 0.5rem 0.75rem;
   font-size: 1rem;
   font-weight: 500;
   box-shadow: 0 1px 4px rgba(60, 72, 88, 0.08);
-  transition: background 0.2s, box-shadow 0.2s;
+  transition: all 0.2s ease-in-out;
   cursor: pointer;
 }
 
-.light-mode .header button {
-  background: #fff;
-  color: #6366f1;
+.light-mode .header button,
+.light-mode .header .tab-button {
+  background: #ffffff; /* white */
+  color: #2563eb; /* blue-600 */
+  border: 1px solid #e5e7eb; /* gray-200 */
 }
-.light-mode .header button:hover {
-  background: #e0e7ff;
-  color: #2563eb;
-  box-shadow: 0 2px 8px rgba(60, 72, 88, 0.10);
+.light-mode .header button:hover,
+.light-mode .header .tab-button:hover {
+  background: #c7d2fe; /* indigo-200 */
+  color: #4f46e5; /* indigo-600 */
+  box-shadow: 0 2px 8px rgba(60, 72, 88, 0.15);
+  border: 1px solid #a5b4fc; /* indigo-300 */
 }
 .light-mode .header .tab-active {
-  background: #6366f1;
-  color: #fff;
+  background-color: #818cf8; /* indigo-400 */
+  color: #ffffff; /* white */
+  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3); /* indigo-600 shadow */
+  border: 1px solid #6366f1; /* indigo-500 */
 }
 
-.dark-mode .header button {
-  background: #23272f;
-  color: #e0e7ff;
+.dark-mode .header button,
+.dark-mode .header .tab-button {
+  background: #1f2937; /* gray-800 */
+  color: #c7d2fe; /* indigo-200 */
+  border: 1px solid #374151; /* gray-700 */
 }
-.dark-mode .header button:hover {
-  background: #374151;
-  color: #6366f1;
-  box-shadow: 0 2px 8px rgba(17, 24, 39, 0.18);
+.dark-mode .header button:hover,
+.dark-mode .header .tab-button:hover {
+  background: #4b5563; /* gray-600 */
+  color: #a5b4fc; /* indigo-300 */
+  box-shadow: 0 2px 8px rgba(17, 24, 39, 0.25);
+  border: 1px solid #6366f1; /* indigo-500 */
 }
 .dark-mode .header .tab-active {
-  background: #6366f1;
-  color: #e0e7ff;
+  background-color: #6366f1; /* indigo-500 */
+  color: #ffffff; /* white */
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.4);
+  border: 1px solid #818cf8; /* indigo-400 */
 }
 
 
 
 .card {
   transition:
-    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transform 0.2s,
+    box-shadow 0.2s;
   cursor: grab;
-  height: fit-content;
+  height: fit-content; /* Important for dynamic height */
   border-radius: 0.5rem;
-  border: none;
-  padding: 0.5rem 0;
+  border: 1px solid;
+  padding: 0;
 }
 
 .card h3 {
-  font-size: 1.01rem;
-  line-height: 1.1;
+  font-size: 1.1rem;
+  line-height: 1.4;
   font-weight: 700;
   margin: 0;
 }
@@ -116,27 +130,29 @@
 
 
 .light-mode .card {
-  background: #fff;
+  background: #ffffff; /* white */
   box-shadow: 0 1px 4px rgba(60, 72, 88, 0.06);
 }
 .light-mode .card:hover {
-  transform: scale(1.01);
+  transform: scale(1.02);
   box-shadow: 0 2px 8px rgba(60, 72, 88, 0.10);
 }
 
 
 .dark-mode .card {
-  background: #23272f;
+  background: #1f2937; /* gray-800 */
   box-shadow: 0 1px 4px rgba(17, 24, 39, 0.12);
 }
 .dark-mode .card:hover {
-  transform: scale(1.01);
+  transform: scale(1.02);
   box-shadow: 0 2px 8px rgba(17, 24, 39, 0.18);
 }
 
 .card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 8px 24px rgba(60, 72, 88, 0.16), 0 2px 8px rgba(60, 72, 88, 0.08);
+  transform: scale(1.02);
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 
@@ -149,10 +165,10 @@
 
 
 .card.dragging {
-  transform: scale(1.04);
+  transform: scale(1.02);
   box-shadow:
-    0 16px 32px -4px rgba(60, 72, 88, 0.18),
-    0 8px 16px -2px rgba(60, 72, 88, 0.10);
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
   z-index: 10;
 }
 
@@ -160,9 +176,9 @@
 /* Grid to support automatic placement with dynamic heights */
 .masonry-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  grid-auto-rows: 1px;
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-auto-rows: 1px; /* This small value helps with placement algorithm */
+  gap: 1.5rem;
   padding: 2rem 1rem;
 }
 
@@ -182,49 +198,50 @@
 
 .light-mode .card button,
 .light-mode .edit-link-btn {
-  background: #6366f1;
-  color: #fff;
+  background: #3b82f6; /* blue-500 */
+  color: #ffffff; /* white */
 }
 .light-mode .card button:hover,
 .light-mode .edit-link-btn:hover {
-  background: #2563eb;
+  background: #2563eb; /* blue-600 */
   box-shadow: 0 2px 8px rgba(60, 72, 88, 0.10);
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 
 .dark-mode .card button,
 .dark-mode .edit-link-btn {
-  background: #374151;
-  color: #e0e7ff;
+  background: #374151; /* gray-700 */
+  color: #e0f2fe; /* blue-100 */
 }
 .dark-mode .card button:hover,
 .dark-mode .edit-link-btn:hover {
-  background: #6366f1;
+  background: #60a5fa; /* blue-400 */
   box-shadow: 0 2px 8px rgba(17, 24, 39, 0.18);
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 
 /* Make links more modern */
 .card a {
   font-weight: 500;
-  border-radius: 0.5rem;
-  padding: 0.25rem 0.5rem;
-  transition: background 0.2s, color 0.2s;
+  padding: 0.25rem 0;
+  transition: color 0.2s;
   text-decoration: none;
+  display: flex;
+  align-items: center;
 }
 .light-mode .card a {
-  color: #2563eb;
+  color: #2563eb; /* blue-600 */
 }
 .light-mode .card a:hover {
-  background: #e0e7ff;
-  color: #1e40af;
+  color: #1d4ed8; /* blue-700 */
+  text-decoration: underline;
 }
 .dark-mode .card a {
-  color: #a5b4fc;
+  color: #93c5fd; /* blue-300 */
 }
 .dark-mode .card a:hover {
-  background: #374151;
-  color: #6366f1;
+  color: #60a5fa; /* blue-400 */
+  text-decoration: underline;
 }

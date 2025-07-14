@@ -7,7 +7,7 @@ const Bookmarks = ({ bookmark }: { bookmark: Bookmark }) => {
     return (
       <div
         className="card border rounded-lg shadow-sm transition-colors duration-200"
-        data-id="2"
+        data-id={bookmark.id}
       >
         <div className="p-4 border-b font-bold flex justify-between items-center">
           <h3>{bookmark.title}</h3>
@@ -35,8 +35,9 @@ const Bookmarks = ({ bookmark }: { bookmark: Bookmark }) => {
         <a
           href={bookmark.url}
           className="hover:underline transition-colors duration-200"
+          rel="noopener noreferrer"
         >
-          <FontAwesomeIcon icon={faLink} className="mr-2 text-blue-500 dark:text-blue-400" />
+          <FontAwesomeIcon icon={faLink} className="mr-2 text-blue-500 dark:text-blue-300" />
           {bookmark.title}
         </a>
         {/* <button
