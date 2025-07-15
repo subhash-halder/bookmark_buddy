@@ -47,7 +47,6 @@ Bookmark Buddy requires the following permissions:
 2. **tabGroups**: Required to properly integrate with Chrome's tab grouping feature for accurate bookmark representation.
 3. **bookmarks**: Essential to access and display your Chrome bookmarks on the new tab page.
 4. **storage**: Used to save your preferences locally on your device.
-5. **Host Permission** (<all_urls>): Required to load website favicons for your bookmarks and to ensure proper link handling when you click on bookmarks.
 
 ## Data Security
 
@@ -61,7 +60,7 @@ We may update our Privacy Policy from time to time. We will notify you of any ch
 
 If you have any questions about this Privacy Policy, please contact us at:
 
-- Email: [halder.subhash@gmail.com](halder.subhash@gmail.com)
+- Email: [halder.subhash@gmail.com](mailto:halder.subhash@gmail.com)
 - GitHub: [https://github.com/subhash-halder/bookmark_buddy](https://github.com/subhash-halder/bookmark_buddy)
 
 ## User Rights
