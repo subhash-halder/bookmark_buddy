@@ -61,7 +61,7 @@ We may update our Privacy Policy from time to time. We will notify you of any ch
 
 If you have any questions about this Privacy Policy, please contact us at:
 
-- Email: [halder.subhash@gmail.com] _(Please update with your contact email)_
+- Email: [halder.subhash@gmail.com](halder.subhash@gmail.com)
 - GitHub: [https://github.com/subhash-halder/bookmark_buddy](https://github.com/subhash-halder/bookmark_buddy)
 
 ## User Rights
